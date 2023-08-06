@@ -2,7 +2,10 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import FindActivityBox from '../components/findActivityBox'
+import FindActivityBox from '../components/FindActivityBox'
+import { useState } from 'react'
+
+export const STRAVA_REDIRECT_URI = "http://localhost:3000/api/auth/strava/callback"
 
 const Home: NextPage = () => {
   const [authStatus, setAuthStatus] = useState<boolean>(false)
@@ -10,7 +13,8 @@ const Home: NextPage = () => {
 
   const handleAuthenticate = async () => {
     //redirect to strava auth page
-    window.location.href = '/api/authenticateStrava'
+    const redirectURL = `https://www.strava.com/oauth/authorize?client_id=111699&response_type=code&redirect_uri=${STRAVA_REDIRECT_URI}&approval_prompt=force&scope=read`
+    window.location.href = redirectURL
     // const response = await fetch('/api/authenticateStrava')
     // const data = await response.json()
     // console.log('data', data)
