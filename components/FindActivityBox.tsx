@@ -1,19 +1,24 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 
 export default function FindActivityBox() {
     const [inputState, setInputState] = useState<string>('')
     const handleClick = () => {
-                
+        mutation.mutate()    
     }
 
-    const fetchTest = async () => {
-        const res = await fetch('/api/hello')
-        const data = await res.json()
+    const mutation = useMutation(async () => {
+        console.log('inputState', inputState)
+        const response = await fetch('/api/createActivityStory', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id: inputState})
+        })
+        const data = await response.json()
         return data
-    }
-
-    const { data, isLoading, error } = useQuery(['test'], fetchTest)
+    })
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputState(e.target.value)
@@ -24,9 +29,7 @@ export default function FindActivityBox() {
             <h3>Enter an activity ID in the search box below to generate a story</h3>
             <input type="text" onChange={handleInputChange} value={inputState} />
             <button onClick={handleClick} type="button">Generate Story</button>
-            {isLoading && <p>Loading...</p>}
-            {error && <p>Error</p>}
-            {data && <p>{data.name}</p>}
+            {mutation.data && <h3>{mutation.data.status}</h3>}
         </div>
     )
 }
