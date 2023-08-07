@@ -12,16 +12,6 @@ const Home: NextPage = () => {
 
   const { data: session } = useSession()
 
-  // const handleAuthenticate = async () => {
-  //   //redirect to strava auth page
-  //   const redirectURL = `https://www.strava.com/oauth/authorize?client_id=111699&response_type=code&redirect_uri=${STRAVA_REDIRECT_URI}&approval_prompt=force&scope=read`
-  //   window.location.href = redirectURL
-  //   // const response = await fetch('/api/authenticateStrava')
-  //   // const data = await response.json()
-  //   // console.log('data', data)
-  //   // setAuthStatus(data.authenticated)
-  // }
-
   if(session){
     //@ts-ignore
     console.log('session', session.accessToken)

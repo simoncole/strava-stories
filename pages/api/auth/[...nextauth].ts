@@ -8,6 +8,9 @@ export const authOptions = {
             clientSecret: process.env.STRAVA_CLIENT_SECRET as string
         })
     ],
+    jwt: {
+        secret: process.env.JWT_SECRET as string
+    },
     callbacks: {
         async jwt({token, account}: any) {
             // Persist the OAuth access_token to the token right after signin
