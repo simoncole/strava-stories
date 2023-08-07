@@ -29,7 +29,9 @@ export default function FindActivityBox() {
             <h3>Enter an activity ID in the search box below to generate a story</h3>
             <input type="text" onChange={handleInputChange} value={inputState} />
             <button onClick={handleClick} type="button">Generate Story</button>
-            {mutation.data && <h3>{mutation.data.status}</h3>}
+            {mutation.isLoading && <h3>Generating Story...</h3>}
+            {mutation.isError && <h3>Something went wrong</h3>}
+            {mutation.data && <p>{mutation.data.story}</p>}
         </div>
     )
 }
