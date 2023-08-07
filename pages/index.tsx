@@ -6,6 +6,8 @@ import FindActivityBox from '../components/FindActivityBox'
 import { useState } from 'react'
 import { getSession, signIn, signOut, useSession } from 'next-auth/react'
 
+export const STRAVA_REDIRECT_URI = "http://localhost:3000/api/auth/callback"
+
 const Home: NextPage = () => {
 
   const { data: session } = useSession()

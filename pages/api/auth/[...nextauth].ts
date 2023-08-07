@@ -30,8 +30,8 @@ export const authOptions = {
             session.accessToken = token.accessToken
             return session
         }
-    }
-
+    },
+    secret: process.env.NEXTAUTH_SECRET as string
 }
 
 export default NextAuth(authOptions)
