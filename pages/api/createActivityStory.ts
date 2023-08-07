@@ -32,7 +32,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const activityID = req.body.id
         const name = req.body.name
-        console.log("name is", name)
 
         const stravaRes = await fetch(`https://www.strava.com/api/v3/activities/${activityID}`, {
             method: 'GET', 
@@ -50,6 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             Generate a story about ${name} who went on the following ${activityData.type}. 
             I will give you all the data about the activity and I want you to write a creative story about it.
             If information seems useless, feel free to ignore it but using specific details is encouraged, however only if the details make sense.
+            Don't mention where the activity took place.
 
             `
             //loop over all the keys in the activityData and add them to the prompt
@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const response = await openai.createChatCompletion({
                 model: "gpt-3.5-turbo",
                 messages: [{ role: 'user', content: generatePrompt(activityData) }],
-                
+                temperature: 0.1
             })
             const story = response.data.choices[0].message?.content
             res.status(200).json({story: story})
