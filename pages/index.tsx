@@ -18,7 +18,7 @@ const Home: NextPage = () => {
     return(
       <div className={styles.container}>
         <h1>Welcome to Strava Stories</h1>
-        <FindActivityBox />
+        <FindActivityBox name={session.user?.name} />
         <button onClick={() => signOut()} >Sign Out</button>
       </div>
     )

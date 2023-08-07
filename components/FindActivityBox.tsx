@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 
-export default function FindActivityBox() {
+export default function FindActivityBox({ name }: any) {
     const [inputState, setInputState] = useState<string>('')
     const handleClick = () => {
         mutation.mutate()    
@@ -14,7 +14,7 @@ export default function FindActivityBox() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({id: inputState})
+            body: JSON.stringify({id: inputState, name: name})
         })
         const data = await response.json()
         return data
