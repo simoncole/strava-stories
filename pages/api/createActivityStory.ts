@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { default as strava, Strava } from 'strava-v3';
+import { default as stravaAPI, Strava } from 'strava-v3';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './auth/[...nextauth]';
 import {getToken} from "next-auth/jwt";
@@ -8,34 +8,37 @@ import { getSession } from 'next-auth/react';
 const secret = process.env.JWT_SECRET as string
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    // const session = await getServerSession(req, res, authOptions)
-    // console.log(session)
-
-    // if(!session){
-    //     res.status(401).json({error: "Not authenticated"})
-    //     return
-    // }
-
-    const token = await getToken({req, secret})
-    console.log("token", token)
-    //@ts-ignore
-    // console.log(session.accessToken)
     if(req.method === "POST"){
-        const activityID = req.body.id;
-        console.log(activityID);
-
-
+        const tokenRes = await getToken({req, secret})
+        //check to make sure there is a token
+        if(!tokenRes){
+            console.error("No token")
+            res.status(400).json({error: "No token"})
+            return
+        }
+        const token = tokenRes.accessToken as string
+        console.log(token)
 
         //@ts-ignore
-        strava.config({
-            access_token: process.env.STRAVA_ACCESS_TOKEN as string
-        }) 
+        // const strava = new stravaAPI.client(token);
+        // console.log(activityID)
+        // //@ts-ignore
+        // const activity = await strava.activities.get({id: activityID}) 
+        // console.log(activity)
 
-        const payload = await strava.athlete.get({})
-        console.log(payload)
-        // const res = await fetch(`https://www.strava.com/api/v3/athlete/`)
+        const activityID = req.body.id
 
-       res.status(200).json({ status: 'success' })
+        const stravaRes = await fetch(`https://www.strava.com/api/v3/activities/${activityID}`, {
+            method: 'GET', 
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            }
+          })
+        const activity = await stravaRes.json()
+        console.log(activity)
+        res.status(200).json({message: "Success"})
+        
     }
     else{
         console.error("Not a POST request")

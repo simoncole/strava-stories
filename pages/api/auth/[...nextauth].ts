@@ -5,7 +5,14 @@ export const authOptions = {
     providers: [
         StravaProvider({
             clientId: process.env.STRAVA_CLIENT_ID as string,
-            clientSecret: process.env.STRAVA_CLIENT_SECRET as string
+            clientSecret: process.env.STRAVA_CLIENT_SECRET as string,
+            authorization: {
+                params: {
+                    scope: "activity:read_all",
+                    approval_prompt: "auto",
+                    response_type: "code",
+                },
+            }
         })
     ],
     jwt: {
@@ -20,8 +27,6 @@ export const authOptions = {
             return token
         },
         async session({session, token}: any) {
-            // console.log("token", token)
-            // console.log("before", session)
             session.accessToken = token.accessToken
             return session
         }
